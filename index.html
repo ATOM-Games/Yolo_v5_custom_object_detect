@@ -1,0 +1,110 @@
+<html>
+	<head>
+		<title>фронтенд с лампочкой</title>
+		<style rel="stylesheet" type="text/css">
+			#detectIMG { width:400px; height:300px; border:5px solid #550000; }
+			#detectC { width:400px; height:300px; border:5px solid #005500; }
+		</style>
+	</head>
+	<body>
+		<h1>Фронтенд с лампочкой</h1><div id="st"></div>
+		<table><tr><td>
+			<canvas id="detectC" z-index="1"></canvas>
+			<img id="detectIMG" z-index="-1"/>
+		</td><td>
+		<button id="detBut" onclick="startDetect()" >Start Detection</button><br/>
+		<select id="camer">
+		   <option disabled>Выберите камеру</option>
+		   <option value="0">Веб-камера</option>
+		   <option value="1">Доп-камера</option>
+		</select><br/>
+		<input type="checkbox" id="Det_to_screen" checked>Результат на монитор</input><br/>
+		<input type="range" id="step_01" min="0" max="1" value="0.25" step="0.01">чувствительность<br/>
+		<input type="range" id="step_02" min="0" max="1" value="0.45" step="0.01">специфичность<br/>
+		</td></tr></table>
+		
+		
+		
+		<script src="static/jQuery3.js"></script>
+		<script>
+			var detBut = document.getElementById('detBut');
+			var st_div = document.getElementById('st');
+			var imag = document.getElementById('detectIMG');
+			var status = 'OFF';
+			//---
+			var ctx = document.getElementById("detectC").getContext("2d");
+			ctx.globalAlpha = 1;
+			
+			alert("I am Alive");
+			function startDetect(){
+				detBut.setAttribute('onclick', 'stopDetect()');
+				detBut.innerHTML = 'Stop Detection';
+				$.ajax({
+					url:"http://127.0.0.1:5003/status",
+					mode: 'no-cors',
+					type:"POST",
+					contentType:"applicattion/json",
+					dataType:"json",
+					data:JSON.stringify({ 
+						detect : 'start',
+						camera : document.getElementById('camer').options[document.getElementById('camer').selectedIndex].value,
+						step_01 : document.getElementById('step_01').value,
+						step_02 : document.getElementById('step_02').value
+					}),
+					success:function(message){
+						//document.getElementById("nerus_trs").setAttribute('value', message["translate"]);
+					}
+				});
+				getStatus();
+			}
+			function stopDetect(){
+				detBut.setAttribute('onclick', 'startDetect()');
+				detBut.innerHTML = 'Start Detection';
+				$.ajax({
+					url:"http://127.0.0.1:5003/status",
+					mode: 'no-cors',
+					type:"POST",
+					contentType:"applicattion/json",
+					dataType:"json",
+					data:JSON.stringify({ 
+						detect : 'stop',
+						camera : '-',
+						step_01 : '0',
+						step_02 : '0'
+					}),
+					success:function(message){
+						//document.getElementById("nerus_trs").setAttribute('value', message["translate"]);
+					}
+				});
+			}
+			
+			function Update(){
+				getStatus();
+				
+				setTimeout(Update, 200);
+			}
+			Update();
+			function getStatus(){
+				$.ajax({
+					url:"http://127.0.0.1:5003/resultDetect",
+					mode: 'no-cors',
+					type:"POST",
+					contentType:"applicattion/json",
+					dataType:"json",
+					data:JSON.stringify({
+						det : document.getElementById('Det_to_screen').checked ? 'detect' : 'default'
+					}),
+					success:function(message){
+						status = message["status"];
+						st_div.innerHTML = status;
+						if(message["status"] == 'Detect'){
+							var l = message["res_img"].split("'")[1]+"";
+							imag.setAttribute('src', "data:image/png;base64," + l);
+						}
+					}
+				});
+			}
+			
+		</script>
+	</body>
+</html>
