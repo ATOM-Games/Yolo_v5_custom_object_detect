@@ -1,16 +1,17 @@
 <html>
 	<head>
-		<title>фронтенд с лампочкой</title>
+		<title>Тест сервера</title>
 		<style rel="stylesheet" type="text/css">
-			#detectIMG { width:400px; height:300px; border:5px solid #550000; }
-			#detectC { width:400px; height:300px; border:5px solid #005500; }
+			#detectIMG { width:400px; height:300px; border:1px solid #550000; margin-left: -406px; margin-right: 20px; }
+			#detectC { width:400px; height:300px; border:1px solid #005500; margin-right: 0px; }
 		</style>
 	</head>
 	<body>
-		<h1>Фронтенд с лампочкой</h1><div id="st"></div>
+		<h1>Тест сервера</h1><div id="st"></div>
 		<table><tr><td>
-			<canvas id="detectC" z-index="1"></canvas>
-			<img id="detectIMG" z-index="-1"/>
+			<canvas id="detectC" width="400" height="300"></canvas>
+			<img id="detectIMG" />
+			
 		</td><td>
 		<button id="detBut" onclick="startDetect()" >Start Detection</button><br/>
 		<select id="camer">
@@ -25,7 +26,8 @@
 		
 		
 		
-		<script src="static/jQuery3.js"></script>
+		<!--<script src="static/jQuery3.js"></script>-->
+		<script src="{{ url_for('static', filename='static/jQuery3.js') }}"></script>
 		<script>
 			var detBut = document.getElementById('detBut');
 			var st_div = document.getElementById('st');
@@ -33,7 +35,6 @@
 			var status = 'OFF';
 			//---
 			var ctx = document.getElementById("detectC").getContext("2d");
-			ctx.globalAlpha = 1;
 			
 			alert("I am Alive");
 			function startDetect(){
@@ -85,6 +86,8 @@
 			}
 			Update();
 			function getStatus(){
+				ctx.clearRect(0, 0, 400, 300);
+				ctx.beginPath();
 				$.ajax({
 					url:"http://127.0.0.1:5003/resultDetect",
 					mode: 'no-cors',
@@ -95,12 +98,29 @@
 						det : document.getElementById('Det_to_screen').checked ? 'detect' : 'default'
 					}),
 					success:function(message){
-						status = message["status"];
-						st_div.innerHTML = status;
+						let status = message["status"];
+						let v = message["detectes"].length;
+						detBut.disabled = (message["status"]== 'Wait');
+						
 						if(message["status"] == 'Detect'){
 							var l = message["res_img"].split("'")[1]+"";
 							imag.setAttribute('src', "data:image/png;base64," + l);
+							if(document.getElementById('Det_to_screen').checked && v > 0){
+								status += " <b style='color:red'>ОПАСНОСТЬ</b>"
+								for(let i=0; i<v; i += 1){
+									ctx.strokeStyle = "red"; //цвет обводки
+									ctx.lineWidth = "2"; //толщина обводки
+									let x = parseInt(message["detectes"][i].split('|')[0], 10);
+									let y = parseInt(message["detectes"][i].split('|')[1], 10);
+									let w = parseInt(message["detectes"][i].split('|')[2], 10);
+									let h = parseInt(message["detectes"][i].split('|')[3], 10);
+									console.error(message["detectes"][i].split('|')[0]);
+									ctx.rect(x/1.75, y/1.75, w/1.75, h/1.75);
+									ctx.stroke();
+								}
+							}
 						}
+						st_div.innerHTML = status;
 					}
 				});
 			}
