@@ -45,7 +45,7 @@ def NewDetect(s1, s2):
             })
             print(json_message)
             for listener in listeners:
-            requests.post(listener, json=json_message).content
+                requests.post(listener, json=json_message).content
         else:
             if last_res is not None:
                 last_res = None
@@ -56,7 +56,7 @@ def NewDetect(s1, s2):
                 })
                 print(json_message)
                 for listener in listeners:
-                requests.post(listener, json=json_message).content
+                    requests.post(listener, json=json_message).content
             print("zapros")
         if getDetStatus() == 'Wait': setDetStatus('Detect')
         if getDetStatus() == 'OFF':
