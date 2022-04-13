@@ -1,0 +1,1 @@
+venv\Scripts\python.exe -m PyInstaller main.py --add-data "web;web" --add-data "models;models" --add-data "ServerConfig.cfg;."

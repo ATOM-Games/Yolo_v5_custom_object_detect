@@ -1,0 +1,285 @@
+<html>
+	<head>
+		<title>Тест сервера</title>
+		<style rel="stylesheet" type="text/css">
+			#detectIMG { width:400px; height:300px; border:1px solid #550000; margin-left: -406px; margin-right: 20px; }
+			#detectC { width:400px; height:300px; border:1px solid #005500; margin-right: 0px; }
+			
+			.imgs { width:300px; height:225px; border:1px solid #550000; margin-left: -306px; }
+			.cans { width:300px; height:225px; border:1px solid #005500; margin-right: 0px; }
+			
+			#servers { border-collapse: collapse; }
+			#servers td { border : 1px solid #000; padding : 10px; }
+			.ip { width:200px; }
+			.port { width:100px; }
+			#hidden_div { border:1px solid #000; background-color:#aaa; position:fixed; left : 30%; top : 100px; padding : 50px; }
+			#hidden_c { width:400px; height:300px; border:1px solid #005500; margin-right: 0px; }
+			#hidden_i { width:400px; height:300px; border:1px solid #550000; margin-left: -406px; margin-right: 20px; }
+			#message {  }
+		</style>
+	</head>
+	<body>
+		<h1>Тест сервеpов</h1><div id="message"></div>
+		<table id="servers"><tr>
+			<td><!--ВОВА-->
+				<b id="status_0"></b><br/>
+				<div style="display:inline-block"><i>ip адресс</i> <br/>
+					<input type="text" class="ip" id="ip_0" value="127.0.0.1"/>
+				</div>
+				:
+				<div style="display:inline-block"><i>порт</i> <br/>
+					<input type="text" class="port" id="port_0" value="5003"/>
+				</div>
+			</td>
+			<td><!--Pasha-->
+				<b id="status_1"></b><br/>
+				<div style="display:inline-block"><i>ip адресс</i> <br/>
+					<input type="text" class="ip" id="ip_1" value=""/>
+				</div>
+				:
+				<div style="display:inline-block"><i>порт</i> <br/>
+					<input type="text" class="port" id="port_1" value=""/>
+				</div>
+			</td>
+			<td><!--Robert-->
+				<b id="status_2"></b><br/>
+				<div style="display:inline-block"><i>ip адресс</i> <br/>
+					<input type="text" class="ip" id="ip_2" value=""/>
+				</div>
+				:
+				<div style="display:inline-block"><i>порт</i> <br/>
+					<input type="text" class="port" id="port_2" value=""/>
+				</div>
+			</td>
+		</tr><tr>
+			<td colspan="3"><b>настройки</b></td>
+		</tr><tr>
+			<td><!--ВОВА-->
+				<button id="detBut0" onclick="startDetect(0)" >Start Detection</button><br/>
+				<select id="camer0">
+				   <option disabled>Выберите камеру</option>
+				   <option value="0">Веб-камера</option>
+				   <option value="1">Доп-камера</option>
+				</select><br/>
+				<input type="checkbox" id="Det_to_screen0" checked>Результат на монитор</input><br/>
+				<input type="range" id="step_01_0" min="0" max="1" value="0.25" step="0.01">чувствительность<br/>
+				<input type="range" id="step_02_0" min="0" max="1" value="0.45" step="0.01">специфичность<br/>
+			</td>
+			<td><!--Pasha-->
+				<button id="detBut1" onclick="startDetect(1)" >Start Detection</button><br/>
+				<select id="camer1">
+				   <option disabled>Выберите камеру</option>
+				   <option value="0">Веб-камера</option>
+				   <option value="1">Доп-камера</option>
+				</select><br/>
+				<input type="checkbox" id="Det_to_screen1" checked>Результат на монитор</input><br/>
+				<input type="range" id="step_01_1" min="0" max="1" value="0.25" step="0.01">чувствительность<br/>
+				<input type="range" id="step_02_1" min="0" max="1" value="0.45" step="0.01">специфичность<br/>
+			</td>
+			<td><!--Robert-->
+				<button id="detBut2" onclick="startDetect(2)" >Start Detection</button><br/>
+				<select id="camer2">
+				   <option disabled>Выберите камеру</option>
+				   <option value="0">Веб-камера</option>
+				   <option value="1">Доп-камера</option>
+				</select><br/>
+				<input type="checkbox" id="Det_to_screen2" checked>Результат на монитор</input><br/>
+				<input type="range" id="step_01_2" min="0" max="1" value="0.25" step="0.01">чувствительность<br/>
+				<input type="range" id="step_02_2" min="0" max="1" value="0.45" step="0.01">специфичность<br/>
+			</td>
+		</tr><tr>
+			<td colspan="3"><b>вывод:</b></td>
+		</tr><tr>
+			<td><!--ВОВА-->
+				<div id="st_0"></div>
+			</td>
+			<td><!--Pasha-->
+				<div id="st_1"></div>
+			</td>
+			<td><!--Robert-->
+				<div id="st_2"></div>
+			</td>
+		</tr><tr>
+			<td><!--ВОВА-->
+				<canvas class="cans" id="can0" width="300" height="225" onclick="selectImagef(0)"></canvas>
+				<img class="imgs" id="img0"/>
+			</td>
+			<td><!--Pasha-->
+				<canvas class="cans" id="can1" width="300" height="225" onclick="selectImagef(1)"></canvas>
+				<img class="imgs" id="img1"/>
+			</td>
+			<td><!--Robert-->
+				<canvas class="cans" id="can2" width="300" height="225" onclick="selectImagef(2)"></canvas>
+				<img class="imgs" id="img2"/>
+			</td>
+		</tr></table>
+		
+		<div id="hidden_div" style="display:none">
+			<canvas id="hidden_c" width="400" height="300" onclick="closeHidden()"></canvas>
+			<img id="hidden_i"/>
+		</div>
+		
+		
+		<script src="static/jQuery3.js"></script>
+		<script>
+			var detBut = [
+					document.getElementById('detBut0'),
+					document.getElementById('detBut1'),
+					document.getElementById('detBut2')
+				];
+			var st_div = [
+					document.getElementById('st_0'),
+					document.getElementById('st_1'),
+					document.getElementById('st_2')
+				];
+			var imag = [
+					document.getElementById('img0'),
+					document.getElementById('img1'),
+					document.getElementById('img2')
+				];
+			var status = 'OFF';
+			//---
+			var ctx = [
+					document.getElementById("can0").getContext("2d"),
+					document.getElementById("can1").getContext("2d"),
+					document.getElementById("can2").getContext("2d")
+				];
+			var statuses = [
+					document.getElementById('status_0'),
+					document.getElementById('status_1'),
+					document.getElementById('status_2')
+				];
+			
+			var message = document.getElementById('message');
+			var selectImage = -1;
+			//----
+			var h_div = document.getElementById('hidden_div');
+			var h_img = document.getElementById('hidden_i');
+			var h_ctx = document.getElementById('hidden_c').getContext("2d");
+			
+			alert("I am Alive");
+			function startDetect(id){
+				detBut[id].setAttribute('onclick', 'stopDetect('+id+')');
+				detBut[id].innerHTML = 'Stop Detection';
+				$.ajax({
+					//url:"http://127.0.0.1:5003/status",
+					url:"http://"+document.getElementById('ip_'+id).value+":"+document.getElementById('port_'+id).value+"/status",
+					mode: 'no-cors',
+					type:"POST",
+					contentType:"applicattion/json",
+					dataType:"json",
+					data:JSON.stringify({ 
+						detect : 'start',
+						camera : document.getElementById('camer'+id).options[document.getElementById('camer'+id).selectedIndex].value,
+						step_01 : document.getElementById('step_01_'+id).value,
+						step_02 : document.getElementById('step_02_'+id).value
+					}),
+					success:function(message){
+						//document.getElementById("nerus_trs").setAttribute('value', message["translate"]);
+					}
+				});
+				getStatus();
+			}
+			function stopDetect(id){
+				detBut[id].setAttribute('onclick', 'startDetect('+id+')');
+				detBut[id].innerHTML = 'Start Detection';
+				$.ajax({
+					//url:"http://127.0.0.1:5003/status",
+					url:"http://"+document.getElementById('ip_'+id).value+":"+document.getElementById('port_'+id).value+"/status",
+					mode: 'no-cors',
+					type:"POST",
+					contentType:"applicattion/json",
+					dataType:"json",
+					data:JSON.stringify({ 
+						detect : 'stop',
+						camera : '-',
+						step_01 : '0',
+						step_02 : '0'
+					}),
+					success:function(message){
+						//document.getElementById("nerus_trs").setAttribute('value', message["translate"]);
+					}
+				});
+			}
+			
+			function Update(){
+				
+				getStatus(0);
+				getStatus(1);
+				getStatus(2);
+				
+				setTimeout(Update, 200, 0);
+			}
+			Update();
+			function getStatus(id){
+				ctx[id].clearRect(0, 0, 300, 225);
+				ctx[id].beginPath();
+				h_ctx.clearRect(0, 0, 400, 300);
+				h_ctx.beginPath();
+				$.ajax({
+					//url:"http://127.0.0.1:5003/resultDetect",
+					url:"http://"+document.getElementById('ip_'+id).value+":"+document.getElementById('port_'+id).value+"/resultDetect",
+					mode: 'no-cors',
+					type:"POST",
+					contentType:"applicattion/json",
+					dataType:"json",
+					data:JSON.stringify({
+						det : document.getElementById('Det_to_screen'+id).checked ? 'detect' : 'default',
+						address : "http://10.0.0.161:10001/resultDetect"
+					}),
+					success:function(message, status){
+						statuses[id].innerHTML = 'Сервер подключен';
+						statuses[id].setAttribute('style','color:green');
+						
+						let stats = message["status"];
+						let v = message["detectes"].length;
+						detBut[id].disabled = (message["status"]== 'Wait');
+						
+						if(message["status"] == 'Detect'){
+							var l = message["res_img"].split("'")[1]+"";
+							imag[id].setAttribute('src', "data:image/png;base64," + l);
+							if(selectImage==id){
+								h_img.setAttribute('src', "data:image/png;base64," + l);
+							}
+							if(document.getElementById('Det_to_screen'+id).checked && v > 0){
+								stats += " <b style='color:red'>ОПАСНОСТЬ</b>"
+								for(let i=0; i<v; i += 1){
+									ctx[id].strokeStyle = "red"; //цвет обводки
+									ctx[id].lineWidth = "2"; //толщина обводки
+									let x = parseInt(message["detectes"][i].split('|')[0], 10);
+									let y = parseInt(message["detectes"][i].split('|')[1], 10);
+									let w = parseInt(message["detectes"][i].split('|')[2], 10);
+									let h = parseInt(message["detectes"][i].split('|')[3], 10);
+									console.error(message["detectes"][i].split('|')[0]);
+									ctx[id].rect(x/2, y/2, w/2, h/2);
+									ctx[id].stroke();
+									if(selectImage==id){
+										h_ctx.strokeStyle = "red"; //цвет обводки
+										h_ctx.lineWidth = "2"; //толщина обводки
+										h_ctx.rect(x/1.75, y/1.75, w/1.75, h/1.75);
+										h_ctx.stroke();
+									}
+								}
+							}
+						}
+						st_div[id].innerHTML = stats;
+					},
+					error: function(xhr, status, error){
+						statuses[id].innerHTML = 'Подключение отсутствует';
+						statuses[id].setAttribute('style','color:red');
+					}
+				});
+			}
+			
+			function closeHidden(){
+				h_div.setAttribute('style','display:none');
+				selectImage = -1;
+			}
+			function selectImagef (id) {
+				h_div.setAttribute('style','display:block');
+				selectImage = id;
+			}
+			
+		</script>
+	</body>
+</html>
